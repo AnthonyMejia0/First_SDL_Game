@@ -2,7 +2,7 @@
 #define __GAME_H__
 
 #include <SDL2/SDL.h>
-#include <iostream>
+#include "TextureManager.h"
 
 class Game {
 public:
@@ -17,11 +17,10 @@ public:
     bool running() { return m_bRunning; }
 
 private:
+    TextureManager m_textureManager;
     SDL_Window* m_pWindow;
     SDL_Renderer* m_pRenderer;
-    SDL_Texture* m_pTexture;
-    SDL_Rect m_sourceRectangle;
-    SDL_Rect m_destinationRectangle;
+    int m_currentFrame;
     bool m_bRunning;
 };
 
