@@ -6,6 +6,10 @@ Game::Game(): m_pWindow(NULL), m_pRenderer(NULL) {}
 Game::~Game() { clean(); }
 
 bool Game::init (const char* title, int w, int h) {
+    //Load GameObject and Player object
+    m_go.load(100, 100, 128, 82, "animate");
+    m_player.load(300, 300, 128, 82, "animate");
+
     //Initialize SDL
     if (SDL_Init(SDL_INIT_EVERYTHING) == 0) {
         //Succeeded; Create window
@@ -51,14 +55,15 @@ void Game::render() {
     //Clear window
     SDL_RenderClear(m_pRenderer);
     //Draw Textures
-    TheTextureManager::Instance()->draw("animate", 0, 0, 128, 82, m_pRenderer);
-    TheTextureManager::Instance()->drawFrame("animate", 100, 100, 128, 82, 1, m_currentFrame, m_pRenderer);
+    m_go.draw(m_pRenderer);
+    m_player.draw(m_pRenderer);
     //Display window
     SDL_RenderPresent(m_pRenderer);
 }
 
 void Game::update() {
-    m_currentFrame = int(((SDL_GetTicks64() / 100) % 6));
+    m_go.update();
+    m_player.update();
 }
 
 void Game::handleEvents() {
