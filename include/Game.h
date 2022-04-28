@@ -17,7 +17,6 @@ public:
     bool running() { return m_bRunning; }
 
 private:
-    TextureManager m_textureManager;
     SDL_Window* m_pWindow;
     SDL_Renderer* m_pRenderer;
     int m_currentFrame;
