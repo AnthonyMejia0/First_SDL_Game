@@ -3,22 +3,21 @@
 
 int main(int argc, char* argv[])
 {
-    //Game object
-    Game* game;
+    // Create Game object
+    Game* game = new Game();
+
     // initialize SDL
     game->init("My First SDL Game", 640, 480);
 
     //Succeeded; Begin game loop
-    std::cout << "Running Game Loop.\n";
     while (game->running()) {
         game->handleEvents();
         game->update();
         game->render();
     }
-    std::cout << "Game Loop Finished.\n";
 
     //Exit game
-    game->clean();
+    delete game;
 
     return 0;
 }

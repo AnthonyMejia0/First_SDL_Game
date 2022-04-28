@@ -20,35 +20,26 @@ bool Game::init (const char* title, int w, int h) {
             if (m_pRenderer != 0) {
                 //Renderer created
                 std::cout << "Created Renderer.\n";
-                SDL_SetRenderDrawColor(m_pRenderer, 255, 0, 0, 255);
+                SDL_SetRenderDrawColor(m_pRenderer, 0, 0, 0, 255);
             }
             else {
-                std::cout << "Failed to create Renderer. Error: " << SDL_GetError << std::endl;
+                std::cout << "Failed to create Renderer. Error: " << SDL_GetError() << std::endl;
                 return false; 
             }
         }
         else {
-            std::cout << "Failed to create Window. Error: " << SDL_GetError << std::endl;
+            std::cout << "Failed to create Window. Error: " << SDL_GetError() << std::endl;
             return false;
         }
     }
     else {
-        std::cout << "Error initializing SDL. Error: " << SDL_GetError << std::endl;
+        std::cout << "Error initializing SDL. Error: " << SDL_GetError() << std::endl;
         return false;
     }
 
-    //Create Texture from bmp file
-    SDL_Surface* pTempSurface = IMG_Load("res/img/animate-alpha.png");
-    m_pTexture = SDL_CreateTextureFromSurface(m_pRenderer, pTempSurface);
-    SDL_FreeSurface(pTempSurface);
-    //Get and set texture dimensions
-    //SDL_QueryTexture(m_pTexture, NULL, NULL, &m_sourceRectangle.w, &m_sourceRectangle.h);
-    //Set coords to top left of window
-    m_destinationRectangle.x = m_sourceRectangle.x = 0;
-    m_destinationRectangle.y = m_sourceRectangle.y = 0;
-    //Set W & H of destination rectangle
-    m_destinationRectangle.w = m_sourceRectangle.w = 128;
-    m_destinationRectangle.h = m_sourceRectangle.h = 82;
+    std::cout << "Loading Textures...";
+    m_textureManager.load("res/img/animate-alpha.png", "animate", m_pRenderer);
+    std::cout << "Done." << std::endl;
 
     m_bRunning = true;
     return true;
@@ -57,14 +48,15 @@ bool Game::init (const char* title, int w, int h) {
 void Game::render() {
     //Clear window
     SDL_RenderClear(m_pRenderer);
-    //Draw Texture
-    SDL_RenderCopyEx(m_pRenderer, m_pTexture, &m_sourceRectangle, &m_destinationRectangle, 0, 0, SDL_FLIP_NONE);
+    //Draw Textures
+    m_textureManager.draw("animate", 0, 0, 128, 82, m_pRenderer);
+    m_textureManager.drawFrame("animate", 100, 100, 128, 82, 1, m_currentFrame, m_pRenderer);
     //Display window
     SDL_RenderPresent(m_pRenderer);
 }
 
 void Game::update() {
-    m_sourceRectangle.x = 128 * int(((SDL_GetTicks64() / 100) % 6));
+    m_currentFrame = int(((SDL_GetTicks64() / 100) % 6));
 }
 
 void Game::handleEvents() {
