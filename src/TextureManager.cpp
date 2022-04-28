@@ -1,9 +1,6 @@
 #include "TextureManager.h"
 #include <SDL2/SDL_image.h>
 
-TextureManager::TextureManager() {}
-TextureManager::~TextureManager(){}
-
 bool TextureManager::load(std::string fileName, std::string id, SDL_Renderer* pRenderer) {
     //Create texture from file specified
     SDL_Surface* pTempSurface = IMG_Load(fileName.c_str());
@@ -13,10 +10,10 @@ bool TextureManager::load(std::string fileName, std::string id, SDL_Renderer* pR
     }
     SDL_Texture* pTexture = SDL_CreateTextureFromSurface(pRenderer, pTempSurface);
     SDL_FreeSurface(pTempSurface);
+
     if (pTexture != 0) {
         //Texture created; Store in map at key id
-        //std::pair<std::string, SDL_Texture*> p(id, pTexture);
-        m_textureMap.insert(std::make_pair(id, pTexture));
+        m_textureMap[id] = pTexture;
         return true;
     }
 
