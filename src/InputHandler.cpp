@@ -4,6 +4,14 @@
 
 InputHandler* InputHandler::s_pInstance = 0;
 
+InputHandler::InputHandler() {
+    m_mousePosition = new Vector2D();
+
+    for (int i = 0; i < 3; i++) {
+        m_mouseButtonStates.push_back(false);
+    }
+}
+
 void InputHandler::initialiseJoysticks() {
     if (SDL_WasInit(SDL_INIT_JOYSTICK) == 0) {
         SDL_InitSubSystem(SDL_INIT_JOYSTICK);
@@ -64,8 +72,39 @@ int InputHandler::yvalue(int joy, int stick) {
 void InputHandler::update() {
     SDL_Event event;
     while (SDL_PollEvent(&event)) {
-        if (event.type == SDL_QUIT) {
+
+        m_keystates = SDL_GetKeyboardState(0);
+
+        if (event.type == SDL_QUIT)
             TheGame::Instance()->quit();
+
+        //Handle mouse button events
+        if (event.type == SDL_MOUSEBUTTONDOWN) {
+            if (event.button.button == SDL_BUTTON_LEFT)
+                m_mouseButtonStates[LEFT] = true;
+            
+            if (event.button.button == SDL_BUTTON_MIDDLE)
+                m_mouseButtonStates[MIDDLE] = true;
+
+            if (event.button.button == SDL_BUTTON_RIGHT)
+                m_mouseButtonStates[RIGHT] = true;
+        }
+
+        if (event.type == SDL_MOUSEBUTTONUP) {
+            if (event.button.button == SDL_BUTTON_LEFT)
+                m_mouseButtonStates[LEFT] = false;
+            
+            if (event.button.button == SDL_BUTTON_MIDDLE)
+                m_mouseButtonStates[MIDDLE] = false;
+
+            if (event.button.button == SDL_BUTTON_RIGHT)
+                m_mouseButtonStates[RIGHT] = false;
+        }
+
+        //Handle mouse motion events
+        if (event.type == SDL_MOUSEMOTION) {
+            m_mousePosition->setX(event.motion.x);
+            m_mousePosition->setY(event.motion.y);
         }
 
         if (event.type == SDL_JOYAXISMOTION) {
@@ -134,6 +173,19 @@ void InputHandler::update() {
             m_buttonStates[whichOne][event.jbutton.button] = false;
         }
     }
+}
+
+bool InputHandler::isKeyDown(SDL_Scancode key) {
+    if (m_keystates != 0) {
+        if (m_keystates[key] == 1) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    return false;
 }
 
 void InputHandler::clean() {

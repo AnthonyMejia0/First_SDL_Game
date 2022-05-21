@@ -37,7 +37,7 @@ int main(int argc, char* argv[])
     std::cout << "Game initialized successfully\n";
 
     //Exit game
-    delete TheGame::Instance();
+    //delete TheGame::Instance();
 
     return 0;
 }

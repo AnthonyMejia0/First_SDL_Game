@@ -27,6 +27,25 @@ void Player::handleInput() {
             m_velocity.setX(1);
         }
     }
+
+    if (TheInputHandler::Instance()->getMouseButtonState(LEFT)) {
+        m_velocity.setX(1);
+    }
+
+    if (TheInputHandler::Instance()->isKeyDown(SDL_SCANCODE_W))
+        m_velocity.setY(-2);
+
+    if (TheInputHandler::Instance()->isKeyDown(SDL_SCANCODE_A))
+        m_velocity.setX(-2);
+
+    if (TheInputHandler::Instance()->isKeyDown(SDL_SCANCODE_S))
+        m_velocity.setY(2);
+
+    if (TheInputHandler::Instance()->isKeyDown(SDL_SCANCODE_D))
+        m_velocity.setX(2);
+
+    //Vector2D* vec = TheInputHandler::Instance()->getMousePosition();
+    //m_velocity = (*vec - m_position) / 100;
 }
 
 void Player::draw() {

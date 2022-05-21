@@ -11,9 +11,9 @@ bool TextureManager::load(std::string fileName, std::string id, SDL_Renderer* pR
         std::cout << "Error loading file: " << fileName << std::endl;
         return false;
     }
-
-    SDL_Texture* pTexture = SDL_CreateTextureFromSurface(pRenderer, pTempSurface);
     
+    SDL_Texture* pTexture = SDL_CreateTextureFromSurface(pRenderer, pTempSurface);
+
     SDL_FreeSurface(pTempSurface);
 
     if (pTexture != 0) {
@@ -69,4 +69,8 @@ void TextureManager::drawFrame(std::string id, int x, int y, int width, int heig
 
     //Copy texture to renderer
     SDL_RenderCopyEx(pRenderer, m_textureMap[id], &srcRect, &destRect, 0, 0, flip);
+}
+
+void TextureManager::clearFromTextureMap(std::string id) {
+    m_textureMap.erase(id);
 }

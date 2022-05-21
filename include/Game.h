@@ -3,6 +3,9 @@
 
 #include <SDL2/SDL.h>
 #include <vector>
+#include "GameStateMachine.h"
+#include "MenuState.h"
+#include "PlayState.h"
 #include "TextureManager.h"
 #include "InputHandler.h"
 #include "GameObject.h"
@@ -11,11 +14,11 @@
 
 class Game {
 public:
-    ~Game();
 
     static Game* Instance() {
         if (s_pInstance == 0) {
             s_pInstance = new Game();
+            return s_pInstance;
         }
 
         return s_pInstance;
@@ -32,15 +35,17 @@ public:
 
 private:
     Game();
-
+    ~Game();
     static Game* s_pInstance;
     SDL_Window* m_pWindow;
     SDL_Renderer* m_pRenderer;
     std::vector<GameObject*> m_gameObjects;
     int m_currentFrame;
     bool m_bRunning;
+    GameStateMachine* m_pGameStateMachine;
+
 };
 
 typedef Game TheGame;
 
-#endif
+#endif //__GAME_H__
